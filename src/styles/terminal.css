@@ -109,6 +109,30 @@ body.is-home {
 .is-home .term-line-user .term-role { color: #9cc2a6; }
 .is-home .line-body { position: relative; flex: 1; min-width: 0; }
 .type-caret.is-off { display: none; }
+.thinking-dots { display: none; }
+.is-thinking .thinking-dots {
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 1.75em;
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+}
+.thinking-dots i {
+  width: .32em;
+  height: .32em;
+  border-radius: 50%;
+  background: #aacdb5;
+  animation: thinking-pulse .95s ease-in-out infinite;
+}
+.thinking-dots i:nth-child(2) { animation-delay: .15s; }
+.thinking-dots i:nth-child(3) { animation-delay: .3s; }
+.is-thinking .type-caret { visibility: hidden; }
+@keyframes thinking-pulse {
+  0%, 80%, 100% { opacity: .35; }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+@media (prefers-reduced-motion: reduce) { .thinking-dots i { animation: none; } }
 /* The card closes with a status bar, like a terminal's footer. */
 .is-home .term-status {
   display: flex;

@@ -17,11 +17,20 @@ async function playDialogue() {
     const typed = document.createTextNode('');
     live.replaceChildren(typed, caret);
     line.classList.remove('is-pending');
-    if (!reduced.matches) await pause(260);
+    const replying = line.dataset.dialogue === 'kanlai';
+    if (replying && !reduced.matches) {
+      line.classList.add('is-thinking');
+      await pause(sentence.length > 10 ? 1800 : 1200);
+      line.classList.remove('is-thinking');
+    }
     for (const char of sentence) {
       typed.appendData(char);
-      if (!reduced.matches) await pause(48);
+      if (!reduced.matches) {
+        const characterDelay = replying ? 135 : 105;
+        await pause(/[、。？！]/u.test(char) ? 360 : characterDelay);
+      }
     }
+    if (!reduced.matches) await pause(650);
   }
   prompt.append(caret);
   prompt.classList.remove('is-pending');

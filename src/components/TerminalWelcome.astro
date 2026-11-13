@@ -9,10 +9,13 @@ import '../styles/terminal.css';
   </picture>
   <div class="term-bar" aria-hidden="true"><span class="term-dots"><i></i><i></i><i></i></span><span class="term-title">kanlai · chat</span></div>
   <div class="term-body"><div class="term-chat" lang="ja">
-    {site.terminalLines.map((line, i) => (
-      <p class:list={['term-line', i % 2 === 0 && 'term-line-user']} data-dialogue>
-        <span class="term-role" aria-hidden="true">{i % 2 === 0 ? '›' : 'kanlai ›'}</span>
-        <span class="line-body" aria-label={line}><span class="type-ghost" aria-hidden="true">{line}</span><span class="type-live" aria-hidden="true">{line}</span></span>
+    {site.terminalLines.map(({ speaker, text }) => (
+      <p class:list={['term-line', speaker === 'me' && 'term-line-user']} data-dialogue={speaker}>
+        <span class="term-role" aria-hidden="true">{speaker === 'me' ? '›' : 'kanlai ›'}</span>
+        <span class="line-body" aria-label={text}>
+          <span class="type-ghost" aria-hidden="true">{text}</span><span class="type-live" aria-hidden="true">{text}</span>
+          {speaker === 'kanlai' && <span class="thinking-dots" aria-hidden="true"><i></i><i></i><i></i></span>}
+        </span>
       </p>
     ))}
     <div class="term-line" data-prompt aria-hidden="true"><span class="term-role">›</span><span class="type-caret"></span></div>
