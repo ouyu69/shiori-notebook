@@ -1,9 +1,12 @@
 ---
 import '../styles/tokens.css';
 import '../styles/global.css';
+import '../styles/posts.css';
 import { site, navigation } from '../config/site';
 interface Props { title?: string; description?: string; home?: boolean }
 const { title = site.title, description = site.description, home = false } = Astro.props;
+const path = Astro.url.pathname;
+const activeSection = path.startsWith('/posts/') || path.startsWith('/articles/') ? '/articles/' : path;
 ---
 <!doctype html>
 <html lang="zh-CN">
@@ -26,7 +29,7 @@ const { title = site.title, description = site.description, home = false } = Ast
     <header class="topbar"><div class="top-inner">
       <a class="brand" href="/"><img src="/assets/avatar.webp" width="32" height="32" alt="" />{site.title}</a>
       <nav class="nav" aria-label="主导航">
-        {navigation.map(link => <a href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>{link.title}</a>)}
+        {navigation.map(link => <a href={link.href} aria-current={path === link.href ? 'page' : activeSection === link.href ? 'location' : undefined}>{link.title}</a>)}
         <button class="theme-toggle" type="button" aria-label="切换夜间模式">☾</button>
       </nav>
     </div></header>

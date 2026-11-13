@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts, postUrl } from '../lib/posts';
+const months = Map.groupBy(await getPosts(), post => post.date.slice(0, 7));
+---
+<BaseLayout title="笔记归档"><section class="interior">
+  <h1>笔记归档</h1>
+  {months.size === 0 && <p>还没有可以归档的笔记。</p>}
+  {Array.from(months, ([month, posts]) => <section class="archive-month"><h2>{month.replace('-', ' 年 ')} 月</h2>
+    <ul class="post-list">{posts.map(post => <li><a class="archive-link" href={postUrl(post.slug)}>
+      <time datetime={post.date}>{post.date.slice(5).replace('-', '.')}</time>
+      <span>{post.title}</span>{post.draft && <small>草稿</small>}
+    </a></li>)}</ul></section>)}
+</section></BaseLayout>

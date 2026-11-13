@@ -1,0 +1,20 @@
+.post-list { list-style: none; padding: 0; margin: 12px 0 0; }
+.post-list li { border-top: 1px solid var(--line); }
+.post-row, .recent .post-row { display: block; padding: 18px 0; color: var(--ink); font-size: 16px; }
+.post-row:hover strong, .archive-link:hover span { color: var(--teal); text-decoration: underline; text-underline-offset: 4px; }
+.post-row p { margin: 4px 0 8px; font-size: 14px; color: var(--muted); }
+.post-meta, .filters, .adjacent, .archive-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+.post-meta, .back-link, .entry small, .archive-link time { font-size: 13px; color: var(--muted); }
+.filters { margin: 1rem 0; }
+.filters a { padding: 4px 14px; border-radius: 4px; }
+.filters a[aria-current] { background: var(--pale); color: var(--teal); }
+.archive-month h2 { color: var(--muted); font-size: 18px; margin-top: 32px; }
+.archive-link { padding: 12px 0; }
+.entry header { padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+.entry h1 { line-height: 1.4; overflow-wrap: anywhere; }
+.prose { font-size: 16px; line-height: 1.9; overflow-wrap: anywhere; }
+.prose img { max-width: 100%; height: auto; }
+.prose pre { overflow-x: auto; padding: 1em; }
+.prose a, .adjacent a { color: var(--teal); text-decoration: underline; }
+.adjacent { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 32px; }
+.empty-posts { color: var(--muted); }

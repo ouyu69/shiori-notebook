@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:unit": "vitest run",
     "dev": "astro dev",
     "check": "astro check",
     "build:site": "astro build",
@@ -12,7 +13,11 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@playwright/test": "1.65.0",
+    "@types/node": "24.19.2",
     "astro": "7.4.11",
-    "typescript": "5.9.3"
+    "linkedom": "0.18.15",
+    "typescript": "5.9.3",
+    "vitest": "5.1.0",
+    "yaml": "2.9.1"
   }
 }

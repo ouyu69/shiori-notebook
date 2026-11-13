@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TerminalWelcome from '../components/TerminalWelcome.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+const recent = (await getPosts()).slice(0, 5);
 ---
 <BaseLayout home>
   <h1 class="sr-only">圈圈的手记</h1>
   <TerminalWelcome />
-  <section class="recent"><header><h2>最近记录</h2><a href="/articles/">所有文章 →</a></header><p>还没有发布的笔记。</p></section>
+  <section class="recent"><header><h2>最近记录</h2><a href="/articles/">所有文章 →</a></header><PostList posts={recent} /></section>
 </BaseLayout>
 <style>.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }</style>

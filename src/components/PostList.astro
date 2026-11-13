@@ -1,0 +1,13 @@
+---
+import { postUrl, type PostSummary } from '../lib/posts';
+import PostMeta from './PostMeta.astro';
+interface Props { posts: PostSummary[]; empty?: string }
+const { posts, empty = '还没有发布的笔记。' } = Astro.props;
+---
+{posts.length ? <ul class="post-list">
+  {posts.map(post => <li><a class="post-row" href={postUrl(post.slug)}>
+    <strong>{post.title}</strong>
+    {post.excerpt && <p>{post.excerpt}</p>}
+    <PostMeta post={post} />
+  </a></li>)}
+</ul> : <p class="empty-posts">{empty}</p>}

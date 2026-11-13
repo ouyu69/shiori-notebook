@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
+export function getStaticPaths() {
+  return [
+    { params: { category: undefined }, props: { filter: '全部' } },
+    { params: { category: 'tech' }, props: { filter: '技术' } },
+    { params: { category: 'life' }, props: { filter: '生活' } },
+  ];
+}
+const { filter } = Astro.props;
+const posts = (await getPosts()).filter(post => filter === '全部' || post.category === filter);
+---
+<BaseLayout title="文章"><section class="interior">
+  <h1>文章</h1>
+  <nav class="filters" aria-label="文章分类">
+    {[['全部','/articles/'],['技术','/articles/tech/'],['生活','/articles/life/']].map(([name, href]) =>
+      <a href={href} aria-current={filter === name ? 'page' : undefined}>{name}</a>)}
+  </nav>
+  <PostList posts={posts} empty={filter === '全部' ? '还没有发布的笔记。' : '这个分类还没有笔记。'} />
+</section></BaseLayout>
