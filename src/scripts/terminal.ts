@@ -7,18 +7,24 @@ async function playDialogue() {
     sessionStorage.setItem('kanlai-greeted', '1');
   } catch { return; }
   const pause = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+  const prompt = document.querySelector<HTMLElement>('[data-prompt]')!;
+  const caret = prompt.querySelector<HTMLElement>('.type-caret')!;
+  prompt.classList.add('is-pending');
   for (const line of lines) line.classList.add('is-pending');
   for (const line of lines) {
     const live = line.querySelector<HTMLElement>('.type-live')!;
     const sentence = live.textContent ?? '';
-    live.textContent = '';
+    const typed = document.createTextNode('');
+    live.replaceChildren(typed, caret);
     line.classList.remove('is-pending');
     if (!reduced.matches) await pause(260);
     for (const char of sentence) {
-      live.textContent += char;
+      typed.appendData(char);
       if (!reduced.matches) await pause(48);
     }
   }
+  prompt.append(caret);
+  prompt.classList.remove('is-pending');
 }
 void playDialogue();
 document.addEventListener('keydown', event => {
