@@ -1,0 +1,39 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { site, navigation } from '../config/site';
+interface Props { title?: string; description?: string; home?: boolean }
+const { title = site.title, description = site.description, home = false } = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    {site.url && <link rel="canonical" href={new URL(Astro.url.pathname, site.url).href} />}
+    <link rel="icon" href="/assets/icon.png" />
+    <title>{home ? title : title + ' · ' + site.title}</title>
+    <script is:inline>
+      let savedTheme;
+      try { savedTheme = localStorage.getItem('shiori-theme'); } catch {}
+      document.documentElement.dataset.theme = savedTheme === 'light' || savedTheme === 'dark'
+        ? savedTheme : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    </script>
+  </head>
+  <body class:list={[home && 'is-home']}>
+    <a class="skip" href="#content">跳到正文</a>
+    <header class="topbar"><div class="top-inner">
+      <a class="brand" href="/"><img src="/assets/avatar.webp" width="32" height="32" alt="" />{site.title}</a>
+      <nav class="nav" aria-label="主导航">
+        {navigation.map(link => <a href={link.href} aria-current={Astro.url.pathname === link.href ? 'page' : undefined}>{link.title}</a>)}
+        <button class="theme-toggle" type="button" aria-label="切换夜间模式">☾</button>
+      </nav>
+    </div></header>
+    <main id="content" class="page" tabindex="-1"><slot /></main>
+    <footer class="footer"><span>{site.title}　/　{site.description}</span><span>深海很安静，适合记东西。</span></footer>
+    <script>
+      import '../scripts/theme';
+    </script>
+  </body>
+</html>

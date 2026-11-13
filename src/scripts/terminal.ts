@@ -1,0 +1,26 @@
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+const lines = Array.from(document.querySelectorAll<HTMLElement>('[data-dialogue]'));
+async function playDialogue() {
+  if (reduced.matches) return;
+  try {
+    if (sessionStorage.getItem('kanlai-greeted')) return;
+    sessionStorage.setItem('kanlai-greeted', '1');
+  } catch { return; }
+  const pause = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+  for (const line of lines) line.classList.add('is-pending');
+  for (const line of lines) {
+    const live = line.querySelector<HTMLElement>('.type-live')!;
+    const sentence = live.textContent ?? '';
+    live.textContent = '';
+    line.classList.remove('is-pending');
+    if (!reduced.matches) await pause(260);
+    for (const char of sentence) {
+      live.textContent += char;
+      if (!reduced.matches) await pause(48);
+    }
+  }
+}
+void playDialogue();
+document.addEventListener('keydown', event => {
+  if (event.key === 'Enter' && event.target === document.body && !event.defaultPrevented) location.assign('/articles/');
+});

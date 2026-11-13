@@ -1,0 +1,195 @@
+/* The home page uses a quiet grid and a single character-topped card. */
+body.is-home {
+  background-image:
+    linear-gradient(rgba(63, 108, 91, .065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(63, 108, 91, .065) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.is-home .topbar { background: var(--paper); }
+.is-home .page {
+  width: min(900px, calc(100% - 64px));
+  max-width: 900px;
+  min-height: auto;
+  padding: 255px 0 0;
+  margin: 42px auto 64px;
+}
+/* The home card is a terminal window where kanlai answers the last line. */
+.is-home .welcome-card {
+  background: #1e2a23;
+  border: 1px solid #16211c;
+  border-radius: 6px;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 36px 72px -50px rgba(16, 28, 21, .85), 0 1px 0 rgba(255, 255, 255, .045) inset;
+}
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 18px;
+  background: #26332c;
+  border-bottom: 1px solid #16211c;
+  border-radius: 5px 5px 0 0;
+}
+.term-dots { display: flex; gap: 7px; flex: none; }
+.term-dots i { width: 9px; height: 9px; border-radius: 50%; background: #5f6f63; }
+.term-dots i:nth-child(1) { background: #a56e60; }
+.term-dots i:nth-child(2) { background: #ac9761; }
+.term-dots i:nth-child(3) { background: #7aa185; }
+.term-title {
+  flex: 1;
+  padding-right: 18px;
+  text-align: center;
+  font: 11px/1.6 ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  color: #8ea497;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.term-body {
+  padding: 30px 34px 26px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  font-variant-ligatures: none;
+}
+.is-home .home-character {
+  width: 260px;
+  height: 390px;
+  top: -255px;
+  right: 35px;
+}
+.is-home .welcome-card h1 {
+  margin: 0;
+  max-width: 21.5em;
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: .01em;
+  color: #e9f2e8;
+  position: relative;
+  text-shadow: 0 0 24px rgba(148, 204, 164, .16);
+  overflow-wrap: anywhere;
+}
+
+/* Typed sentence: an invisible copy reserves the final layout height, the live
+   layer types over it, so nothing below the headline ever shifts. */
+.type-ghost { visibility: hidden; }
+.type-live { position: absolute; inset: 0; }
+.type-caret {
+  display: inline-block;
+  width: .56em;
+  height: 1.02em;
+  margin-left: .12em;
+  background: #b8d8c2;
+  vertical-align: -.16em;
+  animation: caret-blink 1.05s steps(1, end) infinite;
+}
+@keyframes caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+/* A short exchange with kanlai: each turn is one terminal line, the answer types. */
+.term-chat { display: flex; flex-direction: column; gap: 9px; }
+.is-home .term-line {
+  display: flex;
+  align-items: baseline;
+  gap: .9ch;
+  margin: 0;
+  max-width: none;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: .01em;
+  color: #e9f2e8;
+}
+.is-home .term-line-user { color: #c6dfcc; }
+.is-home .term-role {
+  flex: none;
+  color: #aacdb5;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+.is-home .term-line-user .term-role { color: #9cc2a6; }
+.is-home .line-body { position: relative; flex: 1; min-width: 0; }
+.type-caret.is-off { display: none; }
+/* The card closes with a status bar, like a terminal's footer. */
+.is-home .term-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 11px 34px 13px;
+  border-top: 1px solid #24342b;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: .02em;
+  color: #839b8e;
+}
+.is-home .term-status-left { white-space: nowrap; }
+.is-home .term-status-link {
+  color: #aacdb5;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.is-home .term-status-link:hover,
+.is-home .term-status-link:focus-visible {
+  color: #d6efdc;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+}
+.is-home .term-status-link:focus-visible { outline: 1px dashed #6f8f7c; outline-offset: 4px; }
+.is-home .term-key {
+  display: inline-block;
+  margin-left: .35em;
+  padding: 0 .45em;
+  border: 1px solid #3b5044;
+  border-radius: 3px;
+  color: #93b8a0;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.is-home .term-answer {
+  display: flex;
+  align-items: baseline;
+  gap: .9ch;
+  margin-top: 3px;
+}
+.is-home .term-answer h1 {
+  flex: 1;
+  min-width: 0;
+  max-width: 24em;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: .01em;
+  text-shadow: none;
+}
+/* Turns are revealed one at a time by typeHome(); hidden until their turn comes. */
+.term-line.is-pending,
+.term-answer.is-pending { visibility: hidden; }
+.is-home .footer { max-width: 900px; margin-top: 0; }
+@media(max-width:860px) {
+  /* Keep the printed line clear of the character's feet on narrower cards. */
+  .is-home .term-body { padding-top: 154px; }
+}
+@media(max-width:700px) {
+  .is-home .page {
+    width: calc(100% - 40px);
+    padding-top: 220px;
+    margin-top: 26px;
+    margin-bottom: 40px;
+  }
+  .is-home .home-character {
+    width: 210px;
+    height: 315px;
+    top: -206px;
+    right: calc(50% - 105px);
+  }
+  .is-home .welcome-card { padding: 0; }
+  .is-home .term-body { padding: 122px 24px 22px; }
+  .is-home .term-answer { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .is-home .term-answer h1 { flex: none; width: 100%; }
+  .is-home .term-status { padding: 10px 24px 12px; }
+  .is-home .term-title { display: none; }
+  .is-home .welcome-card h1 { max-width: none; font-size: 15px; }
+  .is-home .footer { margin-inline: 22px; }
+}

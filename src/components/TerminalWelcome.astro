@@ -1,0 +1,24 @@
+---
+import { site } from '../config/site';
+import '../styles/terminal.css';
+---
+<section class="welcome-card" aria-label="栞濑的终端">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="/assets/sitting-character.png" />
+    <img class="home-character" alt="" src="/assets/character-seated-breathing.webp" width="512" height="768" />
+  </picture>
+  <div class="term-bar" aria-hidden="true"><span class="term-dots"><i></i><i></i><i></i></span><span class="term-title">kanlai · chat</span></div>
+  <div class="term-body"><div class="term-chat" lang="ja">
+    {site.terminalLines.map((line, i) => (
+      <p class:list={['term-line', i % 2 === 0 && 'term-line-user']} data-dialogue>
+        <span class="term-role" aria-hidden="true">{i % 2 === 0 ? '›' : 'kanlai ›'}</span>
+        <span class="line-body" aria-label={line}><span class="type-ghost" aria-hidden="true">{line}</span><span class="type-live" aria-hidden="true">{line}</span></span>
+      </p>
+    ))}
+    <div class="term-line" aria-hidden="true"><span class="term-role">›</span><span class="type-caret"></span></div>
+  </div></div>
+  <div class="term-status"><span class="term-status-left">● kanlai 在值班</span><a class="term-status-link" href="/articles/">打开笔记 <kbd class="term-key">↵</kbd></a></div>
+</section>
+<script>
+  import '../scripts/terminal';
+</script>
