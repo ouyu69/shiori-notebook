@@ -4,7 +4,13 @@ import { getPosts, postUrl } from '../lib/posts';
 const months = Map.groupBy(await getPosts(), post => post.date.slice(0, 7));
 ---
 <BaseLayout title="笔记归档"><section class="interior">
-  <h1>笔记归档</h1>
+  <header class="archive-heading">
+    <h1>笔记归档</h1>
+    <picture aria-hidden="true">
+      <source media="(prefers-reduced-motion: reduce)" srcset="/assets/character-archive-still.png" />
+      <img class="archive-character" src="/assets/character-archive-breathing-blink.webp" width="384" height="576" alt="" decoding="async" />
+    </picture>
+  </header>
   {months.size === 0 && <p>还没有可以归档的笔记。</p>}
   {Array.from(months, ([month, posts]) => <section class="archive-month"><h2>{month.replace('-', ' 年 ')} 月</h2>
     <ul class="post-list">{posts.map(post => <li><a class="archive-link" href={postUrl(post.slug)}>
@@ -12,3 +18,29 @@ const months = Map.groupBy(await getPosts(), post => post.date.slice(0, 7));
       <span>{post.title}</span>{post.draft && <small>草稿</small>}
     </a></li>)}</ul></section>)}
 </section></BaseLayout>
+
+<style>
+  .archive-heading {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 190px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+  }
+  .archive-heading h1 { margin: 0; padding: 0 164px 24px 0; }
+  .archive-character {
+    position: absolute;
+    right: 8px;
+    bottom: -23px;
+    width: 144px;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+  }
+  @media (max-width: 580px) {
+    .archive-heading { min-height: 148px; }
+    .archive-heading h1 { padding-right: 120px; }
+    .archive-character { width: 104px; right: 0; bottom: -17px; }
+  }
+</style>
