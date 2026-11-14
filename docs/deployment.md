@@ -1,6 +1,6 @@
 # 发布与运维
 
-仓库：[ouyu69/shiori-notebook](https://github.com/ouyu69/shiori-notebook)。博客地址：http://117.72.196.0 。WordPress 已迁到 http://117.72.196.0:8080（需云安全组允许 TCP 8080）。当前使用 IP 和 HTTP；取得域名后再配置 HTTPS。
+仓库：[ouyu69/shiori-notebook](https://github.com/ouyu69/shiori-notebook)。博客地址：http://117.72.196.0 。WordPress 已迁到 http://117.72.196.0:8080（已放行并通过公网检查）。当前使用 IP 和 HTTP；取得域名后再配置 HTTPS。
 
 ## 日常发布
 
@@ -12,7 +12,7 @@
 
 Ubuntu / Nginx；部署账号 `shiori-deploy`，无 sudo 权限，目录 `/srv/shiori-notebook`。Nginx 配置模板在 `deploy/shiori.conf`，实际配置在 `/etc/nginx/sites-available/shiori-notebook`。修改 Nginx 后先执行 `nginx -t`，成功才 reload。
 
-目录：`incoming/<SHA>` 上传中，`releases/<SHA>` 保留版本，`current` 当前，`previous` 上次成功版本，`shared/_astro` 与 `shared/pagefind` 保留旧页面所需资源。产物逐文件 SHA-256 校验，切换使用同文件系统原子符号链接；发布与回滚共享服务器 flock 和 GitHub concurrency。过期 main 构建在发布前跳过。健康检查验证版本、首页和文章列表；失败或可捕获中断恢复原链接。首次失败移除 current。
+目录：`incoming/<SHA>` 上传中，`releases/<SHA>` 保留版本，`current` 当前，`previous` 上次成功版本，`shared/_astro` 与 `shared/pagefind` 保留旧页面所需资源。上传通过校验和复用上一版未变化资源，避免重复传输动画。产物逐文件 SHA-256 校验，切换使用同文件系统原子符号链接；发布与回滚共享服务器 flock 和 GitHub concurrency。过期 main 构建在发布前跳过。健康检查验证版本、首页和文章列表；失败或可捕获中断恢复原链接。首次失败移除 current。
 
 production 环境仅允许 main。Secrets：`DEPLOY_SSH_KEY`、`DEPLOY_KNOWN_HOSTS`。Variables：`DEPLOY_HOST=117.72.196.0`、`DEPLOY_PORT=22`、`DEPLOY_USER=shiori-deploy`、`DEPLOY_ROOT=/srv/shiori-notebook`、`SITE_URL=http://117.72.196.0`。主机指纹从已有可信 root SSH 会话读取主机公钥后固定。部署公钥在账号的 authorized_keys，使用 restrict 禁止转发等功能。私钥只存于 GitHub Secret，不能提交 Git。
 

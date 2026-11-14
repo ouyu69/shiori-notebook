@@ -68,5 +68,5 @@ jobs:
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/deploy ~/.ssh/known_hosts
           ssh -i ~/.ssh/deploy -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$USER@$HOST" "mkdir -p '$ROOT/incoming/$GITHUB_SHA'"
-          rsync -az --delete -e "ssh -i ~/.ssh/deploy -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" artifact/ "$USER@$HOST:$ROOT/incoming/$GITHUB_SHA/"
+          rsync -az --checksum --copy-dest="$ROOT/current" --delete --stats -e "ssh -i ~/.ssh/deploy -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" artifact/ "$USER@$HOST:$ROOT/incoming/$GITHUB_SHA/"
           ssh -i ~/.ssh/deploy -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$USER@$HOST" "bash -s -- '$ROOT' '$GITHUB_SHA' '$URL'" < scripts/deploy.sh
