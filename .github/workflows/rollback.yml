@@ -1,0 +1,41 @@
+name: Roll back blog
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Previously deployed commit SHA
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: blog-production
+  cancel-in-progress: false
+jobs:
+  rollback:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Connect and switch to retained release
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ vars.DEPLOY_HOST }}
+          PORT: ${{ vars.DEPLOY_PORT }}
+          USER: ${{ vars.DEPLOY_USER }}
+          ROOT: ${{ vars.DEPLOY_ROOT }}
+          URL: ${{ vars.SITE_URL }}
+          RELEASE: ${{ inputs.release }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE" =~ ^[a-f0-9]{40}$ ]]
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$USER@$HOST" "bash -s -- '$ROOT' '$RELEASE' '$URL' rollback" < scripts/deploy.sh
+          curl --fail --retry 3 "$URL/version.json"

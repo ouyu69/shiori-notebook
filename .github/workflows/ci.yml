@@ -19,6 +19,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:unit
+      - run: bash tests/deploy-smoke.sh scripts/deploy.sh
       - run: npm run check
       - run: node scripts/check-output.mjs
       - run: npx --no-install playwright install --with-deps chromium
@@ -26,8 +27,46 @@ jobs:
       - run: npm run build
       - name: Stamp production artifact
         run: node -e "require('node:fs').writeFileSync('dist/version.json', JSON.stringify({commit:process.env.GITHUB_SHA,builtAt:new Date().toISOString()}))"
+      - run: node scripts/artifact-manifest.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: site-${{ github.sha }}
           path: dist/
           if-no-files-found: error
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: blog-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: site-${{ github.sha }}
+          path: artifact
+      - name: Upload and activate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ vars.DEPLOY_HOST }}
+          PORT: ${{ vars.DEPLOY_PORT }}
+          USER: ${{ vars.DEPLOY_USER }}
+          ROOT: ${{ vars.DEPLOY_ROOT }}
+          URL: ${{ vars.SITE_URL }}
+        run: |
+          set -euo pipefail
+          latest=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha)
+          if [[ "$latest" != "$GITHUB_SHA" ]]; then echo 'Skipping superseded commit'; exit 0; fi
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$USER@$HOST" "mkdir -p '$ROOT/incoming/$GITHUB_SHA'"
+          rsync -az --delete -e "ssh -i ~/.ssh/deploy -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes" artifact/ "$USER@$HOST:$ROOT/incoming/$GITHUB_SHA/"
+          ssh -i ~/.ssh/deploy -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$USER@$HOST" "bash -s -- '$ROOT' '$GITHUB_SHA' '$URL'" < scripts/deploy.sh
