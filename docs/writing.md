@@ -3,7 +3,7 @@
 在项目根目录运行以下命令。最后一项可以选「技术」或「生活」。
 
 ```sh
-npm run new:post -- docker-notes --title "Docker 使用笔记" --category 技术
+  npm run new:post -- docker-notes --title "Docker 使用笔记" --category 技术
 ```
 
 打开 `src/content/posts/docker-notes/index.md` 写正文。命令已填入上海日期和草稿状态。在 `tags: []` 中填写标签，例如 `tags: [Docker, 部署]`。把配图存入同目录的 images，再写 `![说明](./images/example.png)`。
