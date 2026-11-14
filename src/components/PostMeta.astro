@@ -1,6 +1,7 @@
 ---
 import { formatDate } from '../lib/dates';
 import type { PostSummary } from '../lib/posts';
+import { tagUrl } from '../lib/tags';
 interface Props { post: PostSummary }
 const { post } = Astro.props;
 ---
@@ -8,5 +9,5 @@ const { post } = Astro.props;
   <time datetime={post.date}>{formatDate(post.date)}</time>
   <span>{post.category}</span>
   {post.draft && <strong>草稿</strong>}
-  {post.tags.map(tag => <span>#{tag}</span>)}
+  {post.tags.map(tag => <a href={tagUrl(tag)}>#{tag}</a>)}
 </div>

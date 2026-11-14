@@ -25,6 +25,6 @@ npm ci
 npm run dev
 ```
 
-生产预览使用 `npm run check`、`npm run build:site`、`npm run preview`。打开终端中显示的本机地址。界面文案在 `src/config/site.ts`，角色与图标来自作者提供的 shiori-notebook 原稿。
+生产预览使用 `npm run check`、`npm run build`、`npm run preview`。完整构建会同时生成静态页面和全文索引。使用 `npm run new:post` 创建新稿，参数与发布步骤见[写作指南](docs/writing.md)。界面文案在 `src/config/site.ts`，角色与图标来自作者提供的 shiori-notebook 原稿。
 
 浏览器验收使用本机 Chrome。启动生产预览后运行 `node scripts/verify-home.mjs`；可用 `PREVIEW_URL` 指定预览地址，用 `BROWSER_CHANNEL` 指定已安装的 Chromium 浏览器。传入原稿 index.html 的绝对路径可生成对照截图。

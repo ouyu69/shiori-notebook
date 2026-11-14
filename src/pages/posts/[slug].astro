@@ -18,7 +18,7 @@ const { Content, headings } = await render(post.entry);
 ---
 <BaseLayout title={post.title} description={post.excerpt}>
   <a class="back-link" href="/articles/">← 回到笔记列表</a>
-  <article class="entry"><header><h1>{post.title}</h1><PostMeta post={post} />
+  <article class="entry" data-pagefind-body><header><h1 data-pagefind-meta="title">{post.title}</h1><PostMeta post={post} />
     {post.updated && <small>更新于 <time datetime={post.updated}>{formatDate(post.updated)}</time></small>}
   </header><div class="reading-grid">
     <Toc headings={headings} />

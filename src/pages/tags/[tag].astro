@@ -1,0 +1,14 @@
+---
+import { getPosts } from '../../lib/posts';
+import { tagKey } from '../../lib/tags';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostList from '../../components/PostList.astro';
+export async function getStaticPaths() {
+  const all = await getPosts();
+  return [...new Set(all.flatMap(post => post.tags))].map(tag => ({
+    params: { tag: tagKey(tag) }, props: { tag, posts: all.filter(post => post.tags.includes(tag)) }
+  }));
+}
+const { tag, posts } = Astro.props;
+---
+<BaseLayout title={'标签 · ' + tag}><section class="interior"><a class="back-link" href="/articles/">← 回到笔记列表</a><h1>#{tag}</h1><PostList posts={posts} /></section></BaseLayout>

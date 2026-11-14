@@ -1,5 +1,7 @@
 .post-list { list-style: none; padding: 0; margin: 12px 0 0; }
 .post-list li { border-top: 1px solid var(--line); }
+.post-list li > .post-meta { padding-bottom: 14px; }
+.post-meta a:hover { text-decoration: underline; }
 .post-row, .recent .post-row { display: block; padding: 18px 0; color: var(--ink); font-size: 16px; }
 .post-row:hover strong, .archive-link:hover span { color: var(--teal); text-decoration: underline; text-underline-offset: 4px; }
 .post-row p { margin: 4px 0 8px; font-size: 14px; color: var(--muted); }

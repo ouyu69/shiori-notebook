@@ -8,7 +8,8 @@ export const postSchema = z.object({
   date,
   updated: date.optional(),
   category: z.enum(['技术', '生活']),
-  tags: z.array(z.string().trim().min(1)).default([]),
+  tags: z.array(z.string().trim().refine(tag => !/[\/\\\x00-\x1f\x7f]/.test(tag) && tag !== '.' && tag !== '..', '标签含有无效字符')).default([])
+    .transform(tags => [...new Set(tags.filter(Boolean))]),
   draft: z.boolean().default(true),
   description: z.string().trim().optional(),
 }).refine(post => !post.updated || post.updated >= post.date, {

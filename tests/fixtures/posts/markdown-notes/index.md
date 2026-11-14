@@ -2,7 +2,7 @@
 title: 让 Markdown 笔记有一个稳定的地址
 date: 2026-11-13
 category: 技术
-tags: [Markdown, 笔记]
+tags: [Markdown, 笔记, 知识整理]
 draft: false
 ---
 

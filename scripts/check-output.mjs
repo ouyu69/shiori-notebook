@@ -18,11 +18,14 @@ const build = () => spawnSync(process.execPath, ['node_modules/astro/bin/astro.m
 function buildOk() {
   const result = build();
   assert.equal(result.status, 0, result.stdout + result.stderr);
+  const search = spawnSync(process.execPath, ['scripts/index-posts.mjs', output], { encoding: 'utf8' });
+  assert.equal(search.status, 0, search.stdout + search.stderr);
 }
 const html = route => readFile(path.join(output, route, 'index.html'), 'utf8');
 await mkdir(path.join(source, 'default-draft'));
 await writeFile(path.join(source, 'default-draft/index.md'), original.split('##')[0].replace('draft: false', '').replace('让 Markdown 笔记有一个稳定的地址', '缺省草稿标记样文'));
 buildOk();
+await stat(path.join(output, 'pagefind/pagefind.js'));
 for (const route of ['', 'articles', 'articles/tech', 'archive']) {
   assert.match(await html(route), /href="\/posts\/markdown-notes\/"/);
 }
@@ -42,6 +45,8 @@ assert.match(await html('posts/markdown-notes'), /改过标题的笔记/);
 await writeFile(article, original.replace('draft: false', 'draft: true'));
 buildOk();
 await assert.rejects(html('posts/markdown-notes'), { code: 'ENOENT' });
+await assert.rejects(stat(path.join(output, 'pagefind/pagefind.js')), { code: 'ENOENT' });
+assert.match(await html('search'), /还没有已发布的笔记/);
 assert.doesNotMatch(await html('archive'), /href="\/posts\//);
 await writeFile(article, original.replace('2026-11-13', '2026-02-30'));
 const invalid = build();

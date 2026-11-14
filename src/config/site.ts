@@ -13,6 +13,7 @@ export const site = {
 export const navigation = [
   { href: '/', title: '首页' },
   { href: '/articles/', title: '文章' },
+  { href: '/search/', title: '搜索' },
   { href: '/archive/', title: '归档' },
   { href: '/about/', title: '关于' },
 ];

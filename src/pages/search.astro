@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPosts } from '../lib/posts';
+const hasPosts = (await getPosts({ includeDrafts: false })).length > 0;
+---
+<BaseLayout title="搜索"><section class="interior"><h1>搜索笔记</h1>
+{!hasPosts ? <p>还没有已发布的笔记。</p> : import.meta.env.DEV ? <p>全文索引在生产构建时生成。运行 npm run build，再用 npm run preview 体验搜索。</p> :
+<div><label for="query">标题、正文或标签</label><input type="search" id="query" autocomplete="off" />
+<p id="search-status" aria-live="polite"></p><ul class="post-list" id="search-results"></ul></div>}
+</section></BaseLayout>
+<style>
+label { color:var(--muted); font-size:.9rem; }
+input { display:block; width:100%; margin-top:8px; padding:12px; font:inherit; background:var(--pale); color:var(--ink); border:1px solid var(--line); border-radius:4px; }
+</style>
+<script>
+  import '../scripts/search';
+</script>

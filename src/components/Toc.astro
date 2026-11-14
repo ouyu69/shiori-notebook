@@ -3,7 +3,7 @@ import type { MarkdownHeading } from 'astro';
 interface Props { headings: MarkdownHeading[] }
 const entries = Astro.props.headings.filter(({ depth }) => depth === 2 || depth === 3);
 ---
-{entries.length > 0 && <aside class="reading-toc">
+{entries.length > 0 && <aside class="reading-toc" data-pagefind-ignore>
   {(['desktop', 'mobile'] as const).map(mode => {
     const Wrapper = mode === 'mobile' ? 'details' : 'div';
     const Label = mode === 'mobile' ? 'summary' : 'p';
