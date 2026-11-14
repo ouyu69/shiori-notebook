@@ -12,9 +12,6 @@
 .archive-link { padding: 12px 0; }
 .entry header { padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
 .entry h1 { line-height: 1.4; overflow-wrap: anywhere; }
-.prose { font-size: 16px; line-height: 1.9; overflow-wrap: anywhere; }
-.prose img { max-width: 100%; height: auto; }
-.prose pre { overflow-x: auto; padding: 1em; }
 .prose a, .adjacent a { color: var(--teal); text-decoration: underline; }
 .adjacent { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 32px; }
 .empty-posts { color: var(--muted); }

@@ -1,4 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Content, frontmatter } from '../content/about/index.md';
+import '../styles/prose.css';
 ---
-<BaseLayout title="关于这本手记"><section class="interior"><h1>关于这本手记</h1><p>这里收着圈圈的技术笔记和生活记录。</p></section></BaseLayout>
+<BaseLayout title={frontmatter.title}><article class="interior"><h1>{frontmatter.title}</h1><div class="prose"><Content /></div></article></BaseLayout>

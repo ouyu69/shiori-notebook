@@ -1,0 +1,17 @@
+---
+import type { MarkdownHeading } from 'astro';
+interface Props { headings: MarkdownHeading[] }
+const entries = Astro.props.headings.filter(({ depth }) => depth === 2 || depth === 3);
+---
+{entries.length > 0 && <aside class="reading-toc">
+  {(['desktop', 'mobile'] as const).map(mode => {
+    const Wrapper = mode === 'mobile' ? 'details' : 'div';
+    const Label = mode === 'mobile' ? 'summary' : 'p';
+    return <Wrapper class={mode + '-toc'}>
+      <Label>文章目录</Label>
+      <nav aria-label="文章目录"><ul>
+        {entries.map(({ depth, slug, text }) => <li class:list={[depth === 3 && 'subheading']}><a href={'#' + encodeURIComponent(slug)}>{text}</a></li>)}
+      </ul></nav>
+    </Wrapper>;
+  })}
+</aside>}

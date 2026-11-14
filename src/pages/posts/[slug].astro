@@ -2,6 +2,8 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostMeta from '../../components/PostMeta.astro';
+import Toc from '../../components/Toc.astro';
+import '../../styles/prose.css';
 import { getPosts, postUrl } from '../../lib/posts';
 import { formatDate } from '../../lib/dates';
 export async function getStaticPaths() {
@@ -12,15 +14,21 @@ export async function getStaticPaths() {
   }));
 }
 const { post, newer, older } = Astro.props;
-const { Content } = await render(post.entry);
+const { Content, headings } = await render(post.entry);
 ---
 <BaseLayout title={post.title} description={post.excerpt}>
   <a class="back-link" href="/articles/">← 回到笔记列表</a>
   <article class="entry"><header><h1>{post.title}</h1><PostMeta post={post} />
     {post.updated && <small>更新于 <time datetime={post.updated}>{formatDate(post.updated)}</time></small>}
-  </header><div class="prose"><Content /></div></article>
+  </header><div class="reading-grid">
+    <Toc headings={headings} />
+    <div class="prose"><Content /></div>
+  </div></article>
   {(newer || older) && <nav class="adjacent" aria-label="相邻文章">
     {newer && <a href={postUrl(newer.slug)}>较新一篇 · {newer.title}</a>}
     {older && <a href={postUrl(older.slug)}>较早一篇 · {older.title}</a>}
   </nav>}
 </BaseLayout>
+<script>
+  import '../../scripts/copy-code';
+</script>

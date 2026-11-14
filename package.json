@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:unit": "vitest run",
+    "test:unit": "vitest run tests/content.test.ts",
+    "test:e2e": "playwright test",
     "dev": "astro dev",
     "check": "astro check",
     "build:site": "astro build",
